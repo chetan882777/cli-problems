@@ -1,0 +1,85 @@
+package com.chetan.stackoverflow;
+
+import java.util.ArrayList;
+import java.util.Scanner;
+
+public class Temp {
+
+    private String[] ones = {"", "one", "two", "three", "four", "five", "six", "seven", "eight", "nine"};
+    private String[] tens = {"","","twenty", "thirty", "forty", "fifty", "sixty", "seventy", "eighty", "ninety"};
+    private String[] onesPlus10 = {"ten", "eleven", "twelve", "thirteen", "fourteen", "fifteen", "sixteen", "eigtheen", "nineteen"};
+    private String[] orders = {"hundred","thousand", "lakh", "crore"};
+
+    Temp(){
+        long n = new Scanner(System.in).nextLong();
+        System.out.print(convertToWords(n));
+    }
+
+    private String convertToWords(long n){
+        if(n == 0){
+            return "Zero";
+        }
+
+        ArrayList<String> result = new ArrayList<>();
+        int counter = 0;
+
+        while(n > 0){
+            if(counter < 2){
+                if(counter == 0) {
+                    n = lowerHundred(n, result);
+                }
+                else if(counter == 1) {
+                    if(n%10 != 0) {
+                        int v = (int) (n % 10);
+                        result.add(orders[0] + " ");
+                        result.add(ones[v] + " ");
+                    }
+                }
+            }else{
+                if(n%100 > 9){
+                    result.add(orders[counter -1] + " ");
+                    n = lowerHundred(n, result);
+                }else {
+                    if(n%10 != 0) {
+                        int v = (int) (n % 10);
+                        result.add(orders[counter -1] + " ");
+                        result.add(ones[v] + " ");
+                    }
+                    n = n/10;
+
+                }
+            }
+            if(counter == 4){
+                counter = 0;
+            }
+            counter++;
+            n =n/10;
+        }
+
+        StringBuilder builder = new StringBuilder();
+        for(int i = result.size() -1; i >= 0; i--){
+               builder.append(result.get(i));
+        }
+
+        return builder.toString();
+    }
+
+    private long lowerHundred(long n, ArrayList<String> result) {
+        int v = (int) (n%100);
+        int v2 = v/10;
+        if(v2 == 1){
+            result.add(onesPlus10[v%10] + " ");
+        }else if (v2 == 0){
+            result.add(ones[v%10] + " ");
+        }else{
+            result.add(ones[v%10] + " ");
+            result.add(tens[v2] + " ");
+        }
+        n = n/10;
+        return n;
+    }
+
+    public static void main(String[] args) {
+        new Temp();
+    }
+}
