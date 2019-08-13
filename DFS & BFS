@@ -1,0 +1,84 @@
+package com.chetan.dsa.data_structure;
+
+import android.content.SyncStatusObserver;
+
+import java.util.Iterator;
+import java.util.LinkedList;
+import java.util.Stack;
+
+public class Graph {
+
+    private int V;
+
+    private LinkedList<Integer>[] adj;
+
+    public Graph(int v){
+        V = v;
+        adj = new LinkedList[v];
+        for(int i=0; i<v; i++){
+            adj[i] = new LinkedList<>();
+        }
+    }
+
+    public void addEdge(int v, int w){
+        adj[v].add(w);
+    }
+
+    private void DFSUtil(int v, boolean[] visited){
+        visited[v] = true;
+        System.out.print(v + " ");
+
+        Iterator<Integer> listIterator = adj[v].listIterator();
+
+        while (listIterator.hasNext()){
+
+            int n = listIterator.next();
+
+            if(!visited[n]){
+                DFSUtil(n, visited);
+            }
+
+        }
+    }
+
+    public void DFS(int v){
+
+        boolean[] visited = new boolean[v];
+
+        DFSUtil(v, visited);
+    }
+
+
+    private void BFSUtil(int v, boolean[] visited){
+        visited[v] = true;
+        System.out.print(v + " ");
+
+        LinkedList<Integer> queue = new LinkedList<>();
+
+        queue.add(v);
+
+        while(queue.size() != 0){
+            Integer s = queue.poll();
+            System.out.print(s + " ");
+            Iterator<Integer> i = adj[s].listIterator();
+
+            while(i.hasNext()){
+
+                int t = i.next();
+                if(!visited[t]) {
+                    visited[t] = true;
+                    queue.add(t);
+                }
+            }
+
+        }
+    }
+
+    public void BFS(int v){
+
+        boolean[] visited = new boolean[v];
+
+        BFSUtil(v, visited);
+    }
+
+}
